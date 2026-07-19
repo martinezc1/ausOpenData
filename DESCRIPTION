@@ -1,0 +1,41 @@
+Package: ausOpenData
+Type: Package
+Title: A Lightweight Interface to Austin Texas' Open Data APIs
+Version: 0.1.0
+Authors@R: 
+    c(
+      person("Christian", "Martinez", 
+             email = "c.martinez0@outlook.com", 
+             role = c("aut", "cre"),
+             comment = c(
+               GitHub = "martinezc1",
+               ORCID = "0009-0005-6026-6454"
+             )),
+      person("Emma", "Tupone",
+             role = "ctb",
+             comment = c(GitHub = "emmatup0205"))
+    )
+Description: Provides a unified set of helper functions to access datasets 
+    from the Austin Open Data platform <https://data.austintexas.gov/>. 
+    Functions return results as tidy tibbles and support optional filtering, 
+    sorting, and row limits via the Socrata API.
+License: MIT + file LICENSE
+Encoding: UTF-8
+RoxygenNote: 7.3.3
+Imports: 
+    httr,
+    jsonlite,
+    tibble,
+    janitor,
+    curl,
+    dplyr,
+    rlang
+Suggests:
+    ggplot2,
+    knitr,
+    rmarkdown,
+    scales,
+    testthat (>= 3.0.0),
+    tidyr,
+    vcr (>= 0.6.0),
+    webmockr

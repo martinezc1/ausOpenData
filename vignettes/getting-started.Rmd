@@ -1,0 +1,138 @@
+---
+title: "Getting Started with ausOpenData"
+output: rmarkdown::html_vignette
+author: "Christian Martinez"
+vignette: >
+  %\VignetteIndexEntry{Getting Started with ausOpenData}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(ausOpenData)
+library(ggplot2)
+library(dplyr)
+```
+
+## Introduction
+
+Welcome to the `ausOpenData` package, an R package dedicated to helping R users connect to the [Austin Open Data Portal](https://data.austintexas.gov/)!
+
+The `ausOpenData` package provides a streamlined interface for accessing Austin' vast open data resources. It connects directly to official City of Austin open data portals, including datasets hosted across Socrata-powered city domains, helping users bridge the gap between raw city APIs and tidy data analysis. This package is part of a broader ecosystem of open data tools designed to provide a consistent interface across cities. It does this in two ways:
+
+### The `aus_pull_dataset()` function
+
+The primary way to pull data in this package is the `aus_pull_dataset()` function, which works in tandem with `aus_list_datasets()`. You do not need to know anything about API keys or authentication.
+
+The first step would be to call the `aus_list_datasets()` to see what datasets are in the list and available to use in the `aus_pull_dataset()` function. This provides information for thousands of datasets found on the portal.
+
+```{r aus-list-datasets}
+aus_list_datasets() |> head()
+```
+
+The output includes columns such as the dataset title, description, and link to the source. The most important fields are the dataset `key` and `id`. You need **either** in order to use the `aus_pull_dataset()` function. You can put **either** the key value or id value into the `dataset =` filter inside of `aus_pull_dataset()`.
+
+For instance, if we want to pull the dataset `Golf Courses in Austin`, we can use either of the methods below:
+
+```{r aus-vacant-pull}
+aus_golf_courses <- aus_pull_dataset(
+  dataset = "dtkn-v97q", limit = 2, timeout_sec = 90)
+
+aus_golf_courses <- aus_pull_dataset(
+  dataset = "golf_courses_in_austin", limit = 2, timeout_sec = 90)
+```
+
+No matter if we put the `uid` or the `key` as the value for `dataset =`, we successfully get the data!
+
+### The `aus_any_dataset()` function
+
+The easiest workflow is to use `aus_list_datasets()` together with `aus_pull_dataset()`.
+
+In the event that you have a particular dataset you want to use in R that is not in the list, you can use the `aus_any_dataset()`. The only requirement is the dataset’s API endpoint (a URL provided by the Austin Open Data portal). Here are the steps to get it:
+
+1. On the Austin Open Data Portal, go to the dataset you want to work with.
+2. Click on "Export" (next to the actions button on the right hand side).
+3. Click on "API Endpoint".
+4. Click on "SODA2" for "Version".
+5. Copy the API Endpoint.
+
+Below is an example of how to use the `aus_any_dataset()` once the API endpoint has been discovered, that will pull the same data as the `aus_pull_dataset()` example:
+
+```{text}
+aus_golf_courses <- aus_any_dataset(json_link = "https://data.austintexas.gov/resource/dtkn-v97q.json", limit = 2)
+```
+
+### Rule of Thumb
+
+While both functions provide access to Austin Open Data, they serve slightly different purposes.
+
+In general:
+
+- Use `aus_pull_dataset()` when the dataset is available in `aus_list_datasets()`
+- Use `aus_any_dataset()` when working with datasets outside the catalog
+
+Together, these functions allow users to either quickly access the datasets or flexibly query any dataset available on the Austin Open Data portal.
+
+## Real World Example
+
+Each food establishment in Austin has to be properly inspected, and the dataset with the inspection results is [found here](https://data.austintexas.gov/Health-and-Community-Services/Food-Establishment-Inspection-Scores/ecmv-9xxi/about_data). In R, the `ausOpenData` package can be used to pull this data directly.
+
+By using the `aus_pull_dataset()` function, we can gather information on these food inspection results, and filter based upon any of the columns inside the dataset.
+
+Let's take an example of 3 requests that are routine inspections. The `aus_pull_dataset()` function can filter based off any of the columns in the dataset. To filter, we add `filters = list()` and put whatever filters we would like inside. From our `colnames` call before, we know that there is a column called "city" which we can use to accomplish this.
+
+```{r filter-routine}
+
+aus_routine_results <- aus_pull_dataset(dataset = "ecmv-9xxi",limit = 3, timeout_sec = 90, filters = list(process_description = "Routine Inspection"))
+
+aus_routine_results
+
+# Checking to see the filtering worked
+aus_routine_results |>
+  distinct(process_description)
+```
+
+Success! From calling the `aus_routine_results` dataset we see there are only 3 rows of data, and from the `distinct()` call we see the only proccess featured in our dataset is "Routine Inspection".
+
+One of the strongest qualities this function has is its ability to filter based off of multiple columns. Let's put everything together and get a dataset of *50* businesses that occur in Austin in council district 8.
+
+```{r filter-aus-hundreds}
+# Creating the dataset
+aus_routine_100 <- aus_pull_dataset(dataset = "6rrh-rzua", limit = 50, timeout_sec = 90, filters = list(process_description = "Routine Inspection", score = "100"))
+
+# Calling head of our new dataset
+aus_routine_100 |>
+  slice_head(n = 6)
+
+# Quick check to make sure our filtering worked
+aus_routine_100 |>
+  summarize(rows = n())
+
+aus_routine_100 |>
+  distinct(process_description)
+
+aus_routine_100 |>
+  distinct(score)
+```
+
+We successfully created our dataset that contains 50 requests regarding the scores of 100 routine food inspections in Austin Texas.
+
+## Summary
+
+The `ausOpenData` package serves as a robust interface for the Austin Open Data portal, streamlining the path from raw city APIs to actionable insights. By abstracting the complexities of data acquisition—such as pagination, type-casting, and complex filtering—it allows users to focus on analysis rather than data engineering.
+
+As demonstrated in this vignette, the package provides a seamless workflow for targeted data retrieval, automated filtering, and rapid visualization.
+
+## How to Cite
+
+If you use this package for research or educational purposes, please cite it as follows:
+
+Martinez C (2026). ausOpenData: Convenient Access to Austin Open Data API Endpoints. R package version 0.1.0, <https://martinezc1.github.io/ausOpenData/>.
