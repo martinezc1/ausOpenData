@@ -61,7 +61,7 @@ aus_vacent_buildings <- aus_pull_dataset(
   limit = 10
 )
 
-head(la_vacent_buildings)
+head(aus_vacent_buildings)
 ```
 
 ## About
