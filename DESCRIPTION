@@ -39,3 +39,9 @@ Suggests:
     tidyr,
     vcr (>= 0.6.0),
     webmockr
+URL: https://martinezc1.github.io/ausOpenData/, https://github.com/martinezc1/ausOpenData
+BugReports: https://github.com/martinezc1/ausOpenData/issues
+VignetteBuilder: knitr
+Config/testthat/edition: 3
+Depends: 
+    R (>= 4.1.0)

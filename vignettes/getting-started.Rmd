@@ -106,7 +106,7 @@ One of the strongest qualities this function has is its ability to filter based 
 
 ```{r filter-aus-hundreds}
 # Creating the dataset
-aus_routine_100 <- aus_pull_dataset(dataset = "6rrh-rzua", limit = 50, timeout_sec = 90, filters = list(process_description = "Routine Inspection", score = "100"))
+aus_routine_100 <- aus_pull_dataset(dataset = "ecmv-9xxi", limit = 50, timeout_sec = 90, filters = list(process_description = "Routine Inspection", score = 100))
 
 # Calling head of our new dataset
 aus_routine_100 |>
