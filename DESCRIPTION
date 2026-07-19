@@ -1,6 +1,6 @@
 Package: ausOpenData
 Type: Package
-Title: A Lightweight Interface to Austin Texas' Open Data APIs
+Title: A Lightweight Interface to the Austin, Texas Open Data APIs
 Version: 0.1.0
 Authors@R: 
     c(
@@ -16,7 +16,7 @@ Authors@R:
              comment = c(GitHub = "emmatup0205"))
     )
 Description: Provides a unified set of helper functions to access datasets 
-    from the Austin Open Data platform <https://data.austintexas.gov/>. 
+    from the Austin, Texas Open Data platform <https://data.austintexas.gov/>. 
     Functions return results as tidy tibbles and support optional filtering, 
     sorting, and row limits via the Socrata API.
 License: MIT + file LICENSE
