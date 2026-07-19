@@ -3,7 +3,7 @@
     "path": "~/Documents/Data_Coding/Package_Creating/ausOpenData/vignettes/getting-started.Rmd",
     "project_path": "vignettes/getting-started.Rmd",
     "type": "r_markdown",
-    "hash": "2023873573",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1784410897396.0,
@@ -12,8 +12,8 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "106,25",
-        "scrollLine": "103",
+        "cursorPosition": "9,0",
+        "scrollLine": "0",
         "last_setup_crc32": "b72b609833f0bda7"
     },
     "folds": "",
